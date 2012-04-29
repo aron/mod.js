@@ -4,6 +4,7 @@ var sinon  = require('sinon'),
 
 beforeEach(function () {
   module.modules = {};
+  module.options = module.defaults;
 });
 
 describe('module(keypath)', function () {
@@ -84,10 +85,23 @@ describe('module(keypath, function)', function () {
 });
 
 describe('module.setup(options)', function () {
-  it('should override the module.options object');
-  it('should allow the module.modules object to be overidden');
-  it('should allow the delimiter to be overidden');
-  it('should allow default arguments to be provided');
+  it('should allow the module.modules object to be overidden', function () {
+    var NAMESPACE = {};
+    module.setup({modules: NAMESPACE});
+    assert.equal(module.modules, NAMESPACE);
+  });
+  it('should allow the delimiter to be overidden', function () {
+    module.setup({delimiter: '/'});
+    assert.equal(module.options.delimiter, '/');
+  });
+  it('should allow default arguments to be provided', function () {
+    module.setup({arguments: ['arguments']});
+    assert.deepEqual(module.options.arguments, ['arguments']);
+  });
+  it('should allow default context to be provided', function () {
+    module.setup({context: 'context'});
+    assert.equal(module.options.context, 'context');
+  });
 });
 
 describe('module.noConflict(options)', function () {

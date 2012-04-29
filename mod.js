@@ -57,12 +57,24 @@
     return target;
   };
 
-  module.modules = {};
-  module.options = {
+  module.setup = function (options) {
+    options = options || {};
+    if (options.modules) {
+      module.modules = options.modules;
+    }
+
+    delete options.modules;
+    module.extend(module.options, options);
+    return module;
+  };
+
+  module.modules  = {};
+  module.defaults = {
     context: null,
     arguments: [],
     delimiter: '.'
   };
+  module.options = module.extend({}, module.defaults);
 
   if (typeof context.exports !== 'undefined') {
     context.exports = module;
