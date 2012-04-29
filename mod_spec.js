@@ -1,5 +1,5 @@
 var sinon  = require('sinon'),
-    assert = require('chai').assert,
+    assert = require('assert'),
     module = require('./mod');
 
 beforeEach(function () {
@@ -15,7 +15,7 @@ describe('module(keypath)', function () {
 
   it('should create an object if one does not exist', function () {
     var target = module('missing');
-    assert.isObject(target);
+    assert.notStrictEqual(target, {});
     assert.equal(target, module.modules.missing);
   });
 
@@ -26,7 +26,7 @@ describe('module(keypath)', function () {
 
   it('should create the path if element do not exist', function () {
     var target = module('d.e.f');
-    assert.isObject(target);
+    assert.notStrictEqual(target, {});
     assert.equal(target, module.modules.d.e.f);
   });
 
