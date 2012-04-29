@@ -82,6 +82,13 @@ describe('module(keypath, function)', function () {
     module('a', spy, 'a', 'b', 'c');
     sinon.assert.calledWith(spy, 'a', 'b', 'c', 'd', 'e', 'f');
   });
+
+  it('should call the function with the custom context', function () {
+    var spy = sinon.spy(), context = {};
+    module.options.context = context;
+    module('a', spy);
+    sinon.assert.calledOn(spy, context);
+  });
 });
 
 describe('module.setup(options)', function () {
