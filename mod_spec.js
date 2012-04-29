@@ -56,6 +56,12 @@ describe('module(keypath, object)', function () {
       b: {}
     });
   });
+
+  it('should NOT extend the module if not an object literal', function () {
+    module.modules = {a: {}, b: {}};
+    var target = module('a', exports);
+    assert.deepEqual(module.modules, {a: exports, b: {}});
+  });
 });
 
 describe('module(keypath, function)', function () {
