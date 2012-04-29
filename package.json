@@ -16,7 +16,7 @@
     "sinon": "1.3.4"
   },
   "scripts": {
-    "test": "`npm bin`/mocha *_spec.js"
+    "test": "`npm bin`/mocha *_test.js"
   },
   "private": true
 }
