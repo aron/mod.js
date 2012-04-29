@@ -1,11 +1,23 @@
 (function (context) {
 
-  function module(keypath, mod) {
+  function module(keypath, properties) {
+    var object = module.get(keypath), key;
+    if (properties) {
+      for (key in properties) {
+        if (properties.hasOwnProperty(key)) {
+          object[key] = properties[key];
+        }
+      }
+    }
+    return object;
+  }
+
+  module.get = function (keypath) {
     var object = module.modules,
         keys = (keypath || '').split(module.options.delimiter),
         key;
 
-    while (object && keys.length) {
+    while (object && keys.length && keys[0]) {
       key = keys.shift();
 
       if (object.hasOwnProperty(key)) {
@@ -20,7 +32,7 @@
     }
 
     return object;
-  }
+  };
 
   module.modules = {};
   module.options = {

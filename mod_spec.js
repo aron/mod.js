@@ -32,7 +32,16 @@ describe('module(keypath)', function () {
 });
 
 describe('module(keypath, object)', function () {
-  it('should extend the module with the key/values of the second argument');
+  it('should extend the module with the key/values of the second argument', function () {
+    module.modules = {a: {}, b: {}};
+    var target = module('a', {aa: 'aa'});
+    assert.deepEqual(module.modules, {
+      a: {
+        aa: 'aa'
+      },
+      b: {}
+    });
+  });
 });
 
 describe('module(keypath, function)', function () {
