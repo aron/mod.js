@@ -1,29 +1,27 @@
 (function (context) {
 
   function module(keypath, properties) {
-    var object = module.get(keypath), key;
-    if (properties) {
-      for (key in properties) {
-        if (properties.hasOwnProperty(key)) {
-          object[key] = properties[key];
-        }
-      }
-    }
-    return object;
-  }
-
-  module.get = function (keypath) {
     var object = module.modules,
         keys = (keypath || '').split(module.options.delimiter),
-        key;
+        key, previous;
 
     while (object && keys.length && keys[0]) {
       key = keys.shift();
 
       if (object.hasOwnProperty(key)) {
-        object = object[key];
+        previous = object;
+        object   = object[key];
 
         if (keys.length === 0 && object !== undefined) {
+          if (properties) {
+            if (module.isObject(properties)) {
+              module.extend(object, properties);
+            } else {
+              previous[key] = properties;
+            }
+            return module;
+          }
+
           break;
         }
       } else {
@@ -32,6 +30,22 @@
     }
 
     return object;
+  }
+
+  module.isObject = function (object) {
+    return typeof object === 'object'
+        && object !== null
+        && Object.prototype.toString.call(object) !== '[object Array]';
+  };
+
+  module.extend = function (target, object) {
+    var key;
+    for (key in object) {
+      if (object.hasOwnProperty(key)) {
+        target[key] = object[key];
+      }
+    }
+    return target;
   };
 
   module.modules = {};
