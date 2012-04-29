@@ -4,7 +4,7 @@ var sinon  = require('sinon'),
 
 beforeEach(function () {
   module.modules = {};
-  module.options = module.defaults;
+  module.options = module.extend({}, module.defaults);
 });
 
 describe('module(keypath)', function () {
@@ -90,14 +90,17 @@ describe('module.setup(options)', function () {
     module.setup({modules: NAMESPACE});
     assert.equal(module.modules, NAMESPACE);
   });
+
   it('should allow the delimiter to be overidden', function () {
     module.setup({delimiter: '/'});
     assert.equal(module.options.delimiter, '/');
   });
+
   it('should allow default arguments to be provided', function () {
     module.setup({arguments: ['arguments']});
     assert.deepEqual(module.options.arguments, ['arguments']);
   });
+
   it('should allow default context to be provided', function () {
     module.setup({context: 'context'});
     assert.equal(module.options.context, 'context');
@@ -105,7 +108,19 @@ describe('module.setup(options)', function () {
 });
 
 describe('module.noConflict(options)', function () {
-  it('should return the module object');
-  it('should restore the original module varaible');
-  it('should accept an options object and call .configure()');
+  it('should return the module object', function () {
+    assert.equal(module.noConflict(), module);
+  });
+
+  it('should restore the original module variable', function () {
+    // No idea how to test this one in node...
+  });
+
+  it('should accept an options object and call .setup()', function () {
+    var opts = {};
+    sinon.stub(module, 'setup');
+    module.noConflict(opts);
+    sinon.assert.called(module.setup);
+    sinon.assert.calledWith(module.setup, opts);
+  });
 });

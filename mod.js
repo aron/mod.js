@@ -1,4 +1,5 @@
 (function (context) {
+  var _module = context.module;
 
   function module(keypath, properties) {
     var object = module.modules,
@@ -66,6 +67,11 @@
     delete options.modules;
     module.extend(module.options, options);
     return module;
+  };
+
+  module.noConflict = function (options) {
+    context.module = _module;
+    return module.setup(options);
   };
 
   module.modules  = {};
