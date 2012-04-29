@@ -1,11 +1,11 @@
 {
-  "author": "Aron Carroll <self@aroncarroll.com> (http://aroncarroll.com)",
+  "author": "Aron Carroll <hello@aroncarroll.com> (http://aroncarroll.com)",
   "name": "mod",
   "description": "A simple module helper",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "homepage": "http://github.com/aron/mod.js",
   "repository": {
-    "url": ""
+    "url": "git@github.com:aron/mod.js.git"
   },
   "main": "mod.js",
   "engines": {
@@ -13,9 +13,11 @@
   },
   "devDependencies": {
     "chai": "0.5.3",
-    "mocha": "1.0.2"
+    "mocha": "1.0.2",
+    "sinon": "1.3.4"
   },
   "scripts": {
     "test": "`npm bin`/mocha *_spec.js"
-  }
+  },
+  "private": true
 }
