@@ -2,11 +2,29 @@ var assert = require('chai').assert,
     module = require('./mod');
 
 describe('module(keypath)', function () {
-  it('should return an object matching the keypath');
-  it('should create an object if one does not exist');
-  it('should traverse nested keypaths');
-  it('should create the path if element do not exist');
-  it('should use the module.options.delimiter');
+  it('should return an object matching the keypath', function () {
+    module.modules = {key: {}};
+    assert.equal(module('key'), module.modules.key);
+  });
+  it('should create an object if one does not exist', function () {
+    var target = module('missing');
+    assert.isObject(target);
+    assert.equal(target, module.modules.missing);
+  });
+  it('should traverse nested keypaths', function () {
+    module.modules = {a: {b: {c: {}}}};
+    assert.equal(module('a.b.c'), module.modules.a.b.c);
+  });
+  it('should create the path if element do not exist', function () {
+    var target = module('d.e.f');
+    assert.isObject(target);
+    assert.equal(target, module.modules.d.e.f);
+  });
+  it('should use the module.options.delimiter', function () {
+    module.options.delimiter = '/';
+    module.modules = {a: {b: {c: {}}}};
+    assert.equal(module('a/b/c'), module.modules.a.b.c);
+  });
 });
 
 describe('module(keypath, object)', function () {
