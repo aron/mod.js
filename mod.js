@@ -8,20 +8,11 @@
     while (object && keys.length && keys[0]) {
       key = keys.shift();
 
+      previous = object;
       if (object.hasOwnProperty(key)) {
-        previous = object;
-        object   = object[key];
+        object = object[key];
 
         if (keys.length === 0 && object !== undefined) {
-          if (properties) {
-            if (module.isObject(properties)) {
-              module.extend(object, properties);
-            } else {
-              previous[key] = properties;
-            }
-            return module;
-          }
-
           break;
         }
       } else {
@@ -29,8 +20,26 @@
       }
     }
 
+    if (properties) {
+      if (typeof properties === 'function') {
+        properties = module.run(properties, arguments);
+      }
+
+      if (module.isObject(properties)) {
+        module.extend(object, properties);
+      } else {
+        previous[key] = properties;
+      }
+      return module;
+    }
+
     return object;
   }
+
+  module.run = function (fn, args) {
+    args = Array.prototype.slice.call(args, 2).concat(module.options.arguments);
+    return fn.apply(module.options.context, args);
+  };
 
   module.isObject = function (object) {
     return typeof object === 'object'
@@ -50,6 +59,7 @@
 
   module.modules = {};
   module.options = {
+    context: null,
     arguments: [],
     delimiter: '.'
   };

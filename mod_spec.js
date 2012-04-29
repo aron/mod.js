@@ -1,5 +1,10 @@
-var assert = require('chai').assert,
+var sinon  = require('sinon'),
+    assert = require('chai').assert,
     module = require('./mod');
+
+beforeEach(function () {
+  module.modules = {};
+});
 
 describe('module(keypath)', function () {
   it('should return an object matching the keypath', function () {
@@ -53,10 +58,29 @@ describe('module(keypath, object)', function () {
 });
 
 describe('module(keypath, function)', function () {
-  it('should execute the function if provided');
-  it('should extend the module with the results of the function');
-  it('should pass any subsequent arguments into the called function');
-  it('should append any default arguments');
+  it('should execute the function if provided', function () {
+    var spy = sinon.spy();
+    module('a', spy);
+    sinon.assert.called(spy);
+  });
+
+  it('should extend the module with the results of the function', function () {
+    module('a', function () { return 'a'; });
+    assert.equal(module.modules.a, 'a');
+  });
+
+  it('should pass any subsequent arguments into the called function', function () {
+    var spy = sinon.spy();
+    module('a', spy, 'a', 'b', 'c');
+    sinon.assert.calledWith(spy, 'a', 'b', 'c');
+  });
+
+  it('should append any default arguments', function () {
+    var spy = sinon.spy();
+    module.options.arguments = ['d', 'e', 'f'];
+    module('a', spy, 'a', 'b', 'c');
+    sinon.assert.calledWith(spy, 'a', 'b', 'c', 'd', 'e', 'f');
+  });
 });
 
 describe('module.setup(options)', function () {
