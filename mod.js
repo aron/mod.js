@@ -7,9 +7,16 @@
   var _module = context.module;
 
   /* Public: Returns the object under the provided namespace, if it does
-   * not exist then creates one. The value of the object cab also be set
-   * via the second argument. This will take a basic value or a factory
-   * function that should then return the actual value.
+   * not exist then creates one.
+   *
+   * The value of the object can also be set by passing the value argument.
+   * This can take a basic value or a factory function that should then return
+   * the actual value to be used.
+   *
+   * Additional arguments passed into the function will be provided as
+   * arguments to the factory function. This can be used in the same way as
+   * you would a wrapping a script in a closure e.g. passing in jQuery to
+   * create the $ shorthand.
    *
    * keypath - The keypath for the module to return.
    * value   - The value to set the module to.
@@ -32,7 +39,7 @@
    * Returns the module if called with a single argument otherwise returns
    * the module() function.
    */
-  function module(keypath, properties) {
+  function module(keypath, value) {
     var object = module.modules,
         keys = (keypath || '').split(module.options.delimiter),
         key, previous;
@@ -52,15 +59,15 @@
       }
     }
 
-    if (properties) {
-      if (typeof properties === 'function') {
-        properties = module.run(properties, [].slice.call(arguments, 2));
+    if (value) {
+      if (typeof value === 'function') {
+        value = module.run(value, [].slice.call(arguments, 2));
       }
 
-      if (module.isObject(properties)) {
-        module.extend(object, properties);
+      if (module.isObject(value)) {
+        module.extend(object, value);
       } else {
-        previous[key] = properties;
+        previous[key] = value;
       }
       return module;
     }
